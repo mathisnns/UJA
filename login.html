@@ -1,0 +1,115 @@
+<?php 
+?>
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="icon" type="image/x-icon" href="/UJA/favicon.ico">
+
+  <title>Unitée Jeunes Adultes</title>
+
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/signin.css">
+  <link rel="stylesheet" href="css/style.css">
+
+  <script>
+    function error() {
+      document.getElementById("form").style.display = "block";
+      document.getElementById("circle").style.display = "none";
+      document.getElementById("error").style.display = "block";
+    }
+
+    function check() {
+
+
+
+    }
+
+
+    function signIn() {
+      console.log("in the signin");
+
+      var key = document.getElementById("Key").value;
+      var name = document.getElementById("Name").value;
+
+      var url = "php/signin.php?Key=" + key + "&name=" + name;
+
+      document.getElementById("form").style.display = "none";
+      document.getElementById("circle").style.display = "block";
+
+      var getJSON = function(url, callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.responseType = 'text';
+        xhr.onload = function() {
+          var status = xhr.status;
+          if (status == 200) {
+            callback(null, xhr.response);
+          } else {
+            callback(status);
+          }
+        };
+        xhr.send();
+      };
+
+      getJSON(url, function(err, data) {
+        if (err != null) {
+          console.error(err);
+          error();
+        } else {
+          document.cookie = "token=" + data + ";max-age=7000000;path=/;";
+
+          window.location.href = '/UJA/home.php';
+        }
+      });
+    }
+  </script>
+
+</head>
+
+
+<body onload="check()">
+
+  <div class="container" id="form">
+
+    <section class="form-signin w-100 m-auto text-center">
+      <form>
+        <img class="mb-4" src="src/image.jpeg" alt="" width="120" height="120">
+        <h2 class="h3 mb-3 fw-normal">Creez toi un compte !</h2>
+
+        <div class="form-floating">
+          <input type="name" class="form-control" id="Name" placeholder="name@example.com">
+          <label for="floatingInput">Prenom</label>
+        </div>
+        <div class="form-floating">
+          <input type="password" class="form-control" id="Key" placeholder="Password">
+          <label for="floatingPassword">Clé d'entrée</label>
+        </div>
+      </form>
+
+      <p style="color: red; display: none;" id="error">Une erreur s'est produite. La clé d'entrée n'est peut etre pas
+        bonne ? </p>
+
+      <button class="w-100 btn btn-lg btn-primary" onclick="signIn()">Rentrer</button>
+      <p class="mt-5 mb-3 text-muted">&copy; 2022 - <a href="https://github.com/mathisnns">MathisNns</a> </p>
+    </section>
+
+  </div>
+
+  <div class="container" style="display: none;" id="circle">
+    <div class="d-flex justify-content-center ">
+      <div class="circle"></div>
+    </div>
+  </div>
+
+</body>
+
+</html>
